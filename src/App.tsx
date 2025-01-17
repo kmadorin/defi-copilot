@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import WebApp from '@twa-dev/sdk'
 import { ArgentTMA } from '@argent/tma-wallet'
-import { WalletConnect } from './lib/components/WalletConnect'
+import { WalletConnect } from './components/WalletConnect'
 
 function App() {
   const [wallet, setWallet] = useState<ArgentTMA>()
@@ -10,19 +10,26 @@ function App() {
     // Initialize Telegram WebApp
     WebApp.ready();
     // Set the main button to expand to full width
-    WebApp.expand();
+    WebApp.requestFullscreen();
 
     // Initialize Argent TMA
     const argentTMA = ArgentTMA.init({
       appName: "DeFi Copilot",
-      appTelegramUrl: "https://t.me/defi_copilot_bot",
+      appTelegramUrl: "https://t.me/defi_copilot_bot/deficopilot",
       environment: "sepolia",
       sessionParams: {
-        allowedMethods: [], // We'll add specific methods later
+        allowedMethods: [
+          {
+            contract: "0x036133c88c1954413150db74c26243e2af77170a4032934b275708d84ec5452f",
+            selector: "increment"
+          }
+        ],
         validityDays: 7
       }
     });
+
     setWallet(argentTMA);
+
   }, []);
 
   return (

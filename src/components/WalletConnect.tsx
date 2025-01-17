@@ -12,23 +12,25 @@ export function WalletConnect({ wallet }: WalletConnectProps) {
 
   const handleConnect = useCallback(async () => {
     try {
-      const response = await wallet.connect();
-      if (response?.account) {
-        setAccount(response.account);
+			console.log("wallet", wallet)
+
+      const connection = await wallet.connect();
+
+      if (connection?.account) {
+        setAccount(connection.account);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to connect wallet');
+			console.log(err)
     }
   }, [wallet]);
 
   useEffect(() => {
-    // Attempt to auto-connect on component mount
+    // Only set account if already connected
     if (wallet.isConnected() && wallet.sessionAccount) {
       setAccount(wallet.sessionAccount);
-    } else {
-      handleConnect();
     }
-  }, [handleConnect, wallet]);
+  }, [wallet]);
 
   if (error) {
     return <div className="text-red-500">Error: {error}</div>;
@@ -42,6 +44,10 @@ export function WalletConnect({ wallet }: WalletConnectProps) {
       </div>
     );
   }
+
+	if (wallet.isConnected()) {
+		return (<h1>Connected</h1>)
+	}
 
   return (
     <button
