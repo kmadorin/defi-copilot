@@ -2,7 +2,7 @@ import { useWallet } from '../contexts/WalletContext';
 
 export function WalletConnect() {
   const { wallet, account, connect, disconnect, error } = useWallet();
-	
+
   if (error) {
     return <div className="text-red-500">Error: {error}</div>;
   }
@@ -10,8 +10,8 @@ export function WalletConnect() {
   if (account) {
     return (
       <div>
-        <h1>Connected</h1>
-        <p className="text-sm break-all">Address: {account.address}</p>
+        <h1 className="text-white">Connected</h1>
+        <p className="text-sm break-all text-white">Address: {account.address}</p>
         <button
           onClick={disconnect}
           className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
