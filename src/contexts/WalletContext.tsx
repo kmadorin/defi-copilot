@@ -35,8 +35,8 @@ export function WalletProvider({ children }: WalletProviderProps) {
       sessionParams: {
         allowedMethods: [
           {
-            contract: "0x036133c88c1954413150db74c26243e2af77170a4032934b275708d84ec5452f",
-            selector: "increment"
+            contract: "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+            selector: "transfer"
           }
         ],
         validityDays: 7
@@ -61,7 +61,7 @@ export function WalletProvider({ children }: WalletProviderProps) {
         callbackData: 'custom_callback',
         approvalRequests: [
           {
-            tokenAddress: '0x049D36570D4e46f48e99674bd3fcc84644DdD6b96F7C741B1562B82f9e004dC7',
+            tokenAddress: '0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7',
             amount: BigInt(1000000000000000000).toString(),
             spender: 'spender_address',
           }

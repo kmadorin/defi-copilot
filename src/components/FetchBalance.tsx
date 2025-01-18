@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useWallet } from '../contexts/WalletContext';
 import { AccountInterface, Contract } from 'starknet';
-import erc20Abi from '../lib/abi/erc20.abi.json';
+import {erc20ABI} from '../lib/abi/erc20.abi';
+import Big from 'big.js';
 
 const ETH_TOKEN_ADDRESS = '0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7';
 
@@ -12,12 +13,14 @@ export const FetchBalance = () => {
   useEffect(() => {
     async function fetchBalance() {
       try {
-        if (account) {
-          const erc20 = new Contract(erc20Abi, ETH_TOKEN_ADDRESS, account as unknown as AccountInterface);
-          const result = await erc20.balanceOf(account.address) as bigint;
-          const decimals = 18n;
-          const formattedBalance = result / 10n ** decimals; // Adjust the value for decimals using BigInt arithmetic.
-          setBalance(Number(formattedBalance)); // Convert the number for display.
+				console.log('fetchBalance try start')
+				console.log('account: ', account?.address)
+        if (account?.address) {
+          const erc20 = new Contract(erc20ABI, ETH_TOKEN_ADDRESS, account as unknown as AccountInterface);
+          const result = await erc20.balanceOf(account?.address) as bigint;
+          const decimals = new Big(10).pow(18);
+          const formattedBalance = new Big(result.toString()).div(decimals);
+          setBalance(Number(formattedBalance.toFixed(5)));
         }
       } catch (error) {
         console.error("Error fetching balance:", error);

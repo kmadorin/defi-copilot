@@ -2,7 +2,7 @@ import { useWallet } from '../contexts/WalletContext';
 
 export function WalletConnect() {
   const { wallet, account, connect, disconnect, error } = useWallet();
-	console.log('account: ',account)
+	
   if (error) {
     return <div className="text-red-500">Error: {error}</div>;
   }

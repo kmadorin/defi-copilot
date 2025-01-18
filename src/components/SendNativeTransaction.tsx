@@ -1,18 +1,61 @@
-import { useState } from 'react';
-import { useWallet } from '../contexts/WalletContext';
+import { useState, useEffect } from 'react';
+import { Account, Contract, RpcProvider, stark } from 'starknet';
 import { erc20ABI } from '../lib/abi/erc20.abi';
 import Big from 'big.js';
-import { Contract, AccountInterface } from 'starknet';
 
 const ETH_TOKEN_ADDRESS = '0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7';
+const WALLET_STORAGE_KEY = 'starknet_wallet';
+const RPC_ENDPOINT = 'https://starknet-sepolia.public.blastapi.io';
 
-export const SendTransaction = () => {
-  const { account } = useWallet();
+interface WalletData {
+  privateKey: string;
+  address: string;
+}
+
+export const SendNativeTransaction = () => {
+  const [account, setAccount] = useState<Account | null>(null);
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  useEffect(() => {
+    initializeWallet();
+  }, []);
+
+  const initializeWallet = async () => {
+    try {
+      let walletData: WalletData;
+
+      // Try to read existing wallet data from localStorage
+      const storedWallet = localStorage.getItem(WALLET_STORAGE_KEY);
+      if (storedWallet) {
+        walletData = JSON.parse(storedWallet);
+      } else {
+        // Create new wallet with stark utils
+        const privateKey = stark.randomAddress();
+        const provider = new RpcProvider({ nodeUrl: RPC_ENDPOINT });
+        const newAccount = new Account(provider, ETH_TOKEN_ADDRESS, privateKey);
+        
+        walletData = {
+          privateKey: privateKey,
+          address: newAccount.address
+        };
+
+        // Save wallet data to localStorage
+        localStorage.setItem(WALLET_STORAGE_KEY, JSON.stringify(walletData));
+      }
+
+      // Initialize account with RPC provider
+      const provider = new RpcProvider({ nodeUrl: RPC_ENDPOINT });
+      const account = new Account(provider, ETH_TOKEN_ADDRESS, walletData.privateKey);
+      setAccount(account);
+    } catch (err) {
+      console.error('Failed to initialize wallet:', err);
+      setError('Failed to initialize wallet');
+    }
+  };
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +65,7 @@ export const SendTransaction = () => {
 
     try {
       if (!account) {
-        throw new Error('Wallet not connected');
+        throw new Error('Wallet not initialized');
       }
 
       if (!recipient || !amount) {
@@ -30,7 +73,7 @@ export const SendTransaction = () => {
       }
 
       // Create contract instance
-      const erc20 = new Contract(erc20ABI, ETH_TOKEN_ADDRESS, account as unknown as AccountInterface);
+      const erc20 = new Contract(erc20ABI, ETH_TOKEN_ADDRESS, account);
       
       // Convert amount to wei using Big.js for precise calculation
       const amountInWei = new Big(amount).mul(new Big(10).pow(18));
@@ -46,7 +89,7 @@ export const SendTransaction = () => {
       
       setSuccess(`Transaction submitted: ${transaction_hash}`);
       
-      // Optionally wait for transaction confirmation
+      // Wait for transaction confirmation
       await account.waitForTransaction(transaction_hash);
       
     } catch (err) {
@@ -57,13 +100,14 @@ export const SendTransaction = () => {
     }
   };
 
-  if (!account) {
-    return null;
-  }
-
   return (
     <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Send ETH</h2>
+      <h2 className="text-2xl font-bold mb-6">Send ETH (Local Wallet)</h2>
+      {account && (
+        <div className="mb-4">
+          <p className="text-sm break-all">Wallet Address: {account.address}</p>
+        </div>
+      )}
       <form onSubmit={handleSend} className="space-y-4">
         <div>
           <label htmlFor="recipient" className="block text-sm font-medium text-gray-700">
