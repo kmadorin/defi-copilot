@@ -20,14 +20,23 @@ export const ResponseBlock: React.FC<ResponseBlockProps> = ({ command, status, e
   const getStatusMessage = () => {
     switch (status) {
       case 'confirming':
-        return `Please confirm sending ${command?.amount} ${command?.token} to ${command?.recipient}`;
+        return `Please confirm transaction`;
       case 'processing':
         return txHash 
           ? `Processing transaction... Hash: ${txHash}`
           : 'Processing transaction...';
       case 'completed':
         return txHash 
-          ? `Transaction completed successfully! Hash: ${txHash}`
+          ? <span>
+              Transaction completed successfully! Hash: {' '}
+              <a href={`https://sepolia.voyager.online/tx/${txHash}`}
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="underline hover:text-blue-400"
+              >
+                {txHash}
+              </a>
+            </span>
           : 'Transaction completed successfully!';
       case 'error':
         return error || 'Transaction failed. Please try again.';

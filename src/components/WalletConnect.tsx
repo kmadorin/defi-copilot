@@ -1,7 +1,12 @@
 import { useWallet } from '../contexts/WalletContext';
+import {Address} from './Address';
+import { Copy } from 'lucide-react';
+import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
+import { Button } from "@/components/ui/button";
 
 export function WalletConnect() {
-  const { wallet, account, connect, disconnect, error } = useWallet();
+  const { account, connect, disconnect, error } = useWallet();
+  const copyToClipboard = useCopyToClipboard(account?.address || '');
 
   if (error) {
     return <div className="text-red-500">Error: {error}</div>;
@@ -9,26 +14,21 @@ export function WalletConnect() {
 
   if (account) {
     return (
-      <div>
-        <h1 className="text-white">Connected</h1>
-        <p className="text-sm break-all text-white">Address: {account.address}</p>
+      <div className="flex justify-between items-center">
+				<div className="flex items-center">
+        	<Address className="text-lg text-white" symbols={12} address={account.address} />
+					<Button
+						onClick={copyToClipboard}
+						variant="ghost"
+						size="icon"
+						className="ml-2 text-gray-400 hover:text-white hover:bg-transparent"
+					>
+						<Copy className="h-4 w-4" />
+					</Button>
+				</div>
         <button
           onClick={disconnect}
-          className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-        >
-          Disconnect
-        </button>
-      </div>
-    );
-  }
-
-  if (wallet?.isConnected()) {
-    return (
-      <div>
-        <h1>Connected</h1>
-        <button
-          onClick={disconnect}
-          className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
         >
           Disconnect
         </button>

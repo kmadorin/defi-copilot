@@ -1,4 +1,5 @@
 import React from 'react';
+import { Address } from '../../Address';
 
 interface ParsedSendCommand {
   type: 'SEND';
@@ -30,7 +31,7 @@ export const TransactionConfirmation: React.FC<TransactionConfirmationProps> = (
           </div>
           <div className="flex justify-between">
             <span className="text-gray-400">To:</span>
-            <span className="text-white font-mono">{command.recipient}</span>
+            <Address address={command.recipient} symbols={11} className="text-white font-mono"/>
           </div>
         </div>
 
