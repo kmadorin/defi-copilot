@@ -1,50 +1,65 @@
-# React + TypeScript + Vite
+# Starknet DeFi Copilot
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Telegram mini app that simplifies DeFi interactions on Starknet using natural language commands and Argent wallet integration.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Starknet DeFi Copilot is a user-friendly interface that allows users to interact with DeFi protocols directly through Telegram. The app features:
 
-## Expanding the ESLint configuration
+- Natural language command processing for DeFi operations
+- Seamless integration with Argent wallet
+- Token transfers using Telegram usernames or Starknet addresses
+- Real-time transaction status updates
+- User-friendly interface with dark mode support
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Features
 
-- Configure the top-level `parserOptions` property like this:
+- **Natural Language Commands**: Send tokens using simple commands like "Send 50 USDC to @username" or "Swap 0.004 ETH to USDC"
+- **Wallet Integration**: Connect directly to Argent wallet through Telegram
+- **Token Support**: Currently supports ETH and STRK tokens on Starknet Sepolia
+- **Transaction Management**: Real-time status updates and transaction confirmation flows
+- **Address Book**: Map Telegram usernames to Starknet addresses for easier transfers
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Technology Stack
+
+- React + TypeScript + Vite
+- Starknet.js for blockchain interactions
+- Argent TMA Wallet SDK
+- Telegram Mini App SDK
+- TailwindCSS for styling
+- shadcn/ui components
+
+## Getting Started
+
+1. Clone the repository:
+
+bash
+git clone https://github.com/yourusername/defi-copilot.git
+cd defi-copilot
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. Install dependencies:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
 ```
+
+3. Run the development server:
+
+```bash
+npm run dev
+```
+
+## Building for Production
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist` directory.
+
+
+## Try It Out
+
+You can try the app at [t.me/defi_copilot_bot/deficopilot](https://t.me/defi_copilot_bot/deficopilot) using [Telegram Test Environment](https://core.telegram.org/bots/webapps#testing-mini-apps).
+
