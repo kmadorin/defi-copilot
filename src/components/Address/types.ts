@@ -1,4 +1,4 @@
-import { ComponentProps } from '../utils';
+import { ComponentProps } from '../utils/types';
 
 export type AddressProps = ComponentProps<
   'div',

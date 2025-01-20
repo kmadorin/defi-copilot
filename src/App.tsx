@@ -1,7 +1,7 @@
 import { WalletProvider } from './contexts/WalletContext';
 import { WalletConnect } from './components/WalletConnect';
-import { SendTransaction } from './components/SendTransaction';
-import { FetchBalance } from './components/FetchBalance';
+// import { SendTransaction } from './components/SendTransaction';
+// import { FetchBalance } from './components/FetchBalance';
 import { ChatInterface } from './components/ChatInterface';
 
 function App() {

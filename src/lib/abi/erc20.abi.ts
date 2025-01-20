@@ -391,4 +391,4 @@ export const erc20ABI = [
       },
     ],
   },
-]
+] as Abi;
